@@ -27,3 +27,11 @@ To rollout to previous revision: kubectl rollout undo deployment/nginx-deploymen
 To rollout to specific revision: kubectl rollout undo deployment/nginx-deployment --to-revision=2
 
 output: deployment.apps/nginx-deployment rolled back
+---------------------------------------------------------------
+------------------------------------------------------------
+
+kubectl set image ds/fluentd-elasticsearch fluentd-elasticsearch=quay.io/fluentd_elasticsearch/fluentd:v2.6.0 -n kube-system
+kubectl rollout status ds/fluentd-elasticsearch -n kube-system
+kubectl rollout history daemonset <daemonset-name>
+kubectl rollout history daemonset <daemonset-name> --revision=1
+kubectl rollout undo daemonset <daemonset-name> --to-revision=<revision>
