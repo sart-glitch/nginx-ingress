@@ -1,0 +1,29 @@
+when you will get the codes from artifact hub, go inside the repo and run:
+
+helm template . > oldingress.yaml
+
+yaml file will be generated
+
+create a namespace and make the modification where needed
+
+kubectl apply -f oldingress.yaml
+
+New image for v1.6.4: registry.k8s.io/ingress-nginx/controller:v1.6.4@sha256:15be4666c53052484dd2992efacf2f50ea77a78ae8aa21ccd91af6baaa7ea22f
+
+
+
+kubectl set image deployment/ingress-nginx-controller \
+  controller=registry.k8s.io/ingress-nginx/controller:v1.6.4@sha256:15be4666c53052484dd2992efacf2f50ea77a78ae8aa21ccd91af6baaa7ea22f \
+  -n ingress-nginx-new
+
+output: deployment.apps/nginx-deployment image updated
+
+To see all the revisions: kubectl rollout history deployment/nginx-deployment
+
+To see details of a particular revision: kubectl rollout history deployment/nginx-deployment --revision=2
+
+To rollout to previous revision: kubectl rollout undo deployment/nginx-deployment
+
+To rollout to specific revision: kubectl rollout undo deployment/nginx-deployment --to-revision=2
+
+output: deployment.apps/nginx-deployment rolled back
