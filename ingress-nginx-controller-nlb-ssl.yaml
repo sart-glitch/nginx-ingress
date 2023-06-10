@@ -30,6 +30,13 @@ metadata:
   name: ingress-nginx-controller
   namespace: default
 data:
+  http-snippet: |
+    server {
+      listen 2443;
+      return 308 https://$host$request_uri;
+    }
+    #proxy-real-ip-cidr: XXX.XXX.XXX/XX
+  use-forwarded-headers: 'true'
   allow-snippet-annotations: "true"
 ---
 # Source: ingress-nginx/templates/clusterrole.yaml
@@ -292,10 +299,11 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
     service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: "deregistration_delay.timeout_seconds=120"    
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/do-loadbalancer-tls-passthrough: "true"
     #service.beta.kubernetes.io/aws-load-balancer-subnets:
     #service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-092d7d2ea23c4a3ba, subnet-0ed7ad390ab07603e, subnet-0b7fa40880eaeb59b" 
     #service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    #service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
     #service.beta.kubernetes.io/aws-load-balancer-access-log-enabled: "True"
     #service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-name: "nlb-devs-tage-access-logs-new"
     #service.beta.kubernetes.io/aws-load-balancer-name: 5c-network-nlb-dev-stage
@@ -323,7 +331,7 @@ spec:
     - name: https
       port: 443
       protocol: TCP
-      targetPort: https
+      targetPort: http
       appProtocol: https
   selector:
     app.kubernetes.io/name: ingress-nginx
