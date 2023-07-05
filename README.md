@@ -1,3 +1,5 @@
+we can have multiple ingress controller in the same cluster
+we can use same acm for the different domains.
 # ingress-nginx
 
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
